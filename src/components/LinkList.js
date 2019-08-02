@@ -24,11 +24,11 @@ class LinkList extends Component {
       <Query query={FEED_QUERY}>
         {({ loading, error, data }) => {
           if (loading) {
-            return <div>Fetching</div>
+            return <div>Fetching</div>;
           }
 
           if (error) {
-            return <div>Error</div>
+            return <div>Error</div>;
           }
 
           const linksToRender = data.feed.links;
