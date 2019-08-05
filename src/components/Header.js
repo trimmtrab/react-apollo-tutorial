@@ -29,7 +29,7 @@ class Header extends Component {
         </div>
         <div className="flex flex-fixed">
           {
-            authToken ?
+          authToken ?
             <div
               className="ml1 pointer black"
               onClick={() => {

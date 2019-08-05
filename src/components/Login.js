@@ -77,9 +77,11 @@ class Login extends Component {
             className="pointer button"
             onClick={() => this.setState({ login: !login })}
           >
-            {login
-              ? 'need to create an account?'
-              : 'already have an account?'}
+            {
+            login ?
+              'need to create an account?' :
+              'already have an account?'
+            }
           </div>
         </div>
       </div>
