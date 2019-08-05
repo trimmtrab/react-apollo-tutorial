@@ -39,6 +39,9 @@ class Link extends Component {
           authToken && (
             <Mutation
               mutation={VOTE_MUTATION}
+              update={(store, { data: { vote }}) => {
+                this.props.updateStoreAfterVote(store, vote, this.props.link.id);
+              }}
               variables={{ linkId: this.props.link.id }}
             >
               {voteMutation => (
