@@ -30,6 +30,7 @@ export const FEED_QUERY = gql`
 
 class LinkList extends Component {
   _updateCacheAfterVote = (store, createVote, linkId) => {
+    // TODO: Make components re-render on update
     const data = store.readQuery({ query: FEED_QUERY });
     const votedLink = data.feed.links.find(link => link.id === linkId);
 
