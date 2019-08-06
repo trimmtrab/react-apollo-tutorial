@@ -17,6 +17,10 @@ class Header extends Component {
           <Link to="/" className="ml1 no-underline black">
             new
           </Link>
+          <div className="ml1">|</div>
+          <Link to="/search" className="ml1 no-underline black">
+            search
+          </Link>
           {
             authToken && (
             <Fragment>
@@ -27,6 +31,7 @@ class Header extends Component {
             </Fragment>
           )}
         </div>
+
         <div className="flex flex-fixed">
           {
           authToken ?
