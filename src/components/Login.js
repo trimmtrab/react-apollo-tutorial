@@ -30,6 +30,18 @@ class Login extends Component {
     name: '',
   }
 
+  _confirm = async (data) => {
+    const { token } = this.state.login ? data.login : data.signup;
+    this._saveUserData(token);
+    this.props.history.push('/');
+  }
+
+  _saveUserData = token => {
+    // Do not store JWTs in localStorage in real apps
+    // This is only for learning purpose
+    localStorage.setItem(AUTH_TOKEN, token)
+  }
+
   render() {
     const { login, email, password, name } = this.state;
 
@@ -37,13 +49,14 @@ class Login extends Component {
       <div>
         <h4 className="mv3">{login ? 'Login' : 'Sign Up'}</h4>
         <div className="flex flex-column">
-          {!login && (
-            <input
-              onChange={event => this.setState({ name: event.target.value })}
-              placeholder="Your name"
-              type="text"
-              value={name}
-            />
+          {
+          !login && (
+          <input
+            onChange={event => this.setState({ name: event.target.value })}
+            placeholder="Your name"
+            type="text"
+            value={name}
+          />
           )}
           <input
             onChange={event => this.setState({ email: event.target.value })}
@@ -64,7 +77,8 @@ class Login extends Component {
             variables={{ email, password, name }}
             onCompleted={data => this._confirm(data)}
           >
-            {mutation => (
+            {
+            mutation => (
               <div
                 className="pointer mr2 button"
                 onClick={mutation}
@@ -86,18 +100,6 @@ class Login extends Component {
         </div>
       </div>
     )
-  }
-
-  _confirm = async (data) => {
-    const { token } = this.state.login ? data.login : data.signup;
-    this._saveUserData(token);
-    this.props.history.push('/');
-  }
-
-  _saveUserData = token => {
-    // Do not store JWTs in localStorage in real apps
-    // This is only for learning purpose
-    localStorage.setItem(AUTH_TOKEN, token)
   }
 }
 

@@ -128,20 +128,6 @@ class LinkList extends Component {
     }
   }
 
-  _updateCacheAfterVote = (store, createVote, linkId) => {
-    const data = store.readQuery({
-      query: FEED_QUERY,
-      variables: this._getQueryVariables(),
-    });
-    let votedLink = data.feed.links.find(link => link.id === linkId);
-
-    votedLink = {
-      ...votedLink,
-      votes: createVote.link.votes,
-    };
-    store.writeQuery({ query: FEED_QUERY, data });
-  }
-
   _subscribeToNewLinks = subscribeToMore => {
     subscribeToMore({
       document: NEW_LINKS_SUBSCRIPTION,
@@ -175,13 +161,29 @@ class LinkList extends Component {
     });
   }
 
+  _updateCacheAfterVote = (store, createVote, linkId) => {
+    const data = store.readQuery({
+      query: FEED_QUERY,
+      variables: this._getQueryVariables(),
+    });
+    let votedLink = data.feed.links.find(link => link.id === linkId);
+
+    votedLink = {
+      ...votedLink,
+      votes: createVote.link.votes,
+    };
+    store.writeQuery({ query: FEED_QUERY, data });
+  }
+
   render() {
     return (
       <Query
         query={FEED_QUERY}
         variables={this._getQueryVariables()}
       >
-        {({ loading, error, data, subscribeToMore }) => {
+        {({ loading, error = undefined, data, subscribeToMore }) => {
+          // error = undefined is needed to stop VS Code from complaining about TS shit
+
           if (loading) {
             return <div>Fetching</div>;
           }
@@ -202,26 +204,26 @@ class LinkList extends Component {
           return (
             <Fragment>
               {
-                linksToRender.map((link, index) => (
-                  <Link
-                    index={index + pageIndex}
-                    key={link.id}
-                    link={link}
-                    updateStoreAfterVote={this._updateCacheAfterVote}
-                  />
-                ))
+              linksToRender.map((link, index) => (
+                <Link
+                  index={index + pageIndex}
+                  key={link.id}
+                  link={link}
+                  updateStoreAfterVote={this._updateCacheAfterVote}
+                />
+              ))
               }
               {
-                isNewPage && (
-                  <div className="flex ml4 mv3 gray">
-                    <div className="pointer mr2" onClick={this._previousPage}>
-                      Previous
-                    </div>
-                    <div className="pointer" onClick={this._nextPage(data)}>
-                      Next
-                    </div>
+              isNewPage && (
+                <div className="flex ml4 mv3 gray">
+                  <div className="pointer mr2" onClick={this._previousPage}>
+                    Previous
                   </div>
-                )
+                  <div className="pointer" onClick={this._nextPage(data)}>
+                    Next
+                  </div>
+                </div>
+              )
               }
             </Fragment>
           );

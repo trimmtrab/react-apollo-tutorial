@@ -42,6 +42,17 @@ class Search extends Component {
     this._executeSearch();
   }
 
+  _executeSearch = async () => {
+    const { filter } = this.state;
+    const result = await this.props.client.query({
+      query: FEED_SEARCH_QUERY,
+      variables: { filter },
+    });
+    const links = result.data.feed.links;
+
+    this.setState({ links });
+  }
+
   render() {
     return (
       <div>
@@ -66,17 +77,6 @@ class Search extends Component {
         ))}
       </div>
     );
-  }
-
-  _executeSearch = async () => {
-    const { filter } = this.state;
-    const result = await this.props.client.query({
-      query: FEED_SEARCH_QUERY,
-      variables: { filter },
-    });
-    const links = result.data.feed.links;
-
-    this.setState({ links });
   }
 }
 

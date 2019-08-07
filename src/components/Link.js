@@ -44,7 +44,8 @@ class Link extends Component {
               }}
               variables={{ linkId: this.props.link.id }}
             >
-              {voteMutation => (
+              {
+              voteMutation => (
                 <div
                   className="ml1 gray f11 pointer"
                   onClick={voteMutation}

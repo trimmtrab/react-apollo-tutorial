@@ -23,6 +23,24 @@ class CreateLink extends Component {
     url: '',
   }
 
+  _updateCacheAfterNewLink = (store, { data: { post }}) => {
+    const first = LINKS_PER_PAGE;
+    const orderBy = 'createdAt_DESC';
+    const skip = 0;
+
+    const data = store.readQuery({
+      query: FEED_QUERY,
+      variables: { first, orderBy, skip },
+    });
+
+    data.feed.links.unshift(post);
+    store.writeQuery({
+      query: FEED_QUERY,
+      data,
+      variables: { first, orderBy, skip },
+    });
+  }
+
   render() {
     const { description, url } = this.state;
 
@@ -48,29 +66,13 @@ class CreateLink extends Component {
           mutation={POST_MUTATION}
           onCompleted={() => this.props.history.push('/new/1')}
           variables={{ description, url }}
-          update={(store, { data: { post }}) => {
-            const first = LINKS_PER_PAGE;
-            const orderBy = 'createdAt_DESC';
-            const skip = 0;
-
-            const data = store.readQuery({
-              query: FEED_QUERY,
-              variables: { first, orderBy, skip },
-            });
-
-            data.feed.links.unshift(post);
-            store.writeQuery({
-              query: FEED_QUERY,
-              data,
-              variables: { first, orderBy, skip },
-            });
-          }}
+          update={this._updateCacheAfterNewLink}
         >
           {
-            postMutation => (
-              <button onClick={postMutation}>
-                Submit
-              </button>
+          postMutation => (
+            <button onClick={postMutation}>
+              Submit
+            </button>
           )}
         </Mutation>
       </div>
