@@ -78,11 +78,13 @@ const NEW_VOTES_SUBSCRIPTION = gql`
 
 class LinkList extends Component {
   _updateCacheAfterVote = (store, createVote, linkId) => {
-    // TODO: Make components re-render on update
     const data = store.readQuery({ query: FEED_QUERY });
-    const votedLink = data.feed.links.find(link => link.id === linkId);
+    let votedLink = data.feed.links.find(link => link.id === linkId);
 
-    votedLink.votes = createVote.link.votes;
+    votedLink = {
+      ...votedLink,
+      votes: createVote.link.votes,
+    };
     store.writeQuery({ query: FEED_QUERY, data });
   }
 
